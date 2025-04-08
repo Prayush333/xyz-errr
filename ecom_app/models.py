@@ -18,6 +18,7 @@ class Customer(models.Model): # customers details
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+      
 
 
 class Product(models.Model): # products 
