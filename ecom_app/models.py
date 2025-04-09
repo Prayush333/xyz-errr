@@ -14,8 +14,8 @@ class Category(models.Model):
 class Customer(models.Model): 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)
-    email = models.EmailField(max_length=100)
+    phone = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
 
     def __str__(self):
@@ -43,7 +43,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     address = models.CharField(max_length=200,  blank=False)
-    phone = models.CharField(max_length=15,blank=False)
+    phone = models.CharField(max_length=15, blank=False)
     date = models.DateField(default=datetime.datetime.today)
     status = models.BooleanField(default=False)
 
