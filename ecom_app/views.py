@@ -3,6 +3,8 @@ from django.views.generic import ListView
 from ecom_app.models import Product
 
 
+
+
 class HomePage(ListView):
     model = Product
     template_name = "home.html"
@@ -14,3 +16,6 @@ class AboutPage(ListView):
     template_name = "about.html"
 
     
+
+    
+     
