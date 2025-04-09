@@ -1,15 +1,17 @@
 from django.db import models
 import datetime
 
-
-class Category(models.Model): # categories of products
+# categories of products
+ # to spicify the product and manage it
+class Category(models.Model): 
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
     
-
-class Customer(models.Model): # customers details
+# customers details 
+# for registration
+class Customer(models.Model): 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=50)
@@ -20,8 +22,9 @@ class Customer(models.Model): # customers details
         return f'{self.first_name} {self.last_name}'
       
 
-
-class Product(models.Model): # products 
+ # products 
+ # details of product
+class Product(models.Model): 
     name = models.CharField(max_length=100)
     price = models.DecimalField(default=0,decimal_places=2,max_digits=8)
     Category = models.ForeignKey(Category,on_delete=models.CASCADE, default=1)
@@ -33,8 +36,9 @@ class Product(models.Model): # products
     def __str__(self):
         return self.name
 
-
-class Order(models.Model): # product order details
+ # product order details 
+ #  for delevery
+class Order(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
