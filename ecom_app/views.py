@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView
-from ecom_app.models import Product
-
+from django.views.generic import ListView,CreateView
+from ecom_app.models import Customer, Product
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 
 
 
@@ -16,6 +17,12 @@ class AboutPage(ListView):
     template_name = "about.html"
 
     
-
+class UserResister(CreateView):
+    model = Customer
+    template_name = "register.html"
+    form_class = UserCreationForm
+    sucess_url = reverse_lazy('login')
+    
+    
     
      
