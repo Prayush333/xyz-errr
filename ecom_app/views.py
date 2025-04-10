@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import ListView,CreateView
+from django.views.generic import ListView,CreateView,DetailView
 from ecom_app.models import Customer, Product
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
@@ -18,11 +19,19 @@ class AboutPage(ListView):
 
     
 class UserResister(CreateView):
-    model = Customer
+    model = User
     template_name = "register.html"
     form_class = UserCreationForm
-    sucess_url = reverse_lazy('login')
+    success_url = reverse_lazy('login')
     
+class Product(DetailView):
+    model = Product
+    template_name = "items.html"
+    context_object_name = "product"
+
     
+    def get_object(self):
+        return Product.objects.get(id=self.kwargs["id"])
+        
     
      
