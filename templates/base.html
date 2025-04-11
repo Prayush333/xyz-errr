@@ -37,12 +37,17 @@
 
                         {% endif %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Category</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><a class="dropdown-item" href="{% url 'home' %}">All Category</a></li>
                                 <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category' 'Books-&-Stationary' %}">Books & Stationary</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category' 'Baby-Products' %}">Baby Products</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category' 'Groceries' %}">Groceries</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category' 'Sports' %}">Sports</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category' 'Health-&-Beauty' %}">Health & Beauty</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category' 'Clothes-&-Fashions' %}">Clothes & Fashions</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category' 'Electronics' %}">Eletronics</a></li>
                             </ul>
                         </li>
                        

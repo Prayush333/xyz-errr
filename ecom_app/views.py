@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.views.generic import ListView,CreateView,DetailView
-from ecom_app.models import Customer, Product
+from ecom_app.models import Customer, Product,Category
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -32,6 +32,24 @@ class ProductDetail(DetailView):
     
     def get_object(self):
         return Product.objects.get(id=self.kwargs["id"])
-        
     
-     
+from django.views.generic import DetailView
+from django.shortcuts import get_object_or_404
+from .models import Category, Product
+
+class CategoryView(DetailView):
+    model = Category
+    template_name = "category.html"
+    context_object_name = "category"
+
+    def get_object(self, queryset=None):
+        name = self.kwargs['id'].replace('-', ' ')
+        return get_object_or_404(Category, name=name)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products'] = Product.objects.filter(Category=self.object)
+        return context
+
+
+    

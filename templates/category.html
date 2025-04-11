@@ -5,8 +5,8 @@
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Shop smart. Live better.</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">We don't sell products; we sell emotions.</p>
+                    <h1 class="display-4 fw-bolder"> {{ category.name }}</h1>
+                    <p class="lead fw-normal text-white-50 mb-0"></p>
                 </div>
             </div>
         </header>
@@ -24,8 +24,7 @@
                             <!--sale badge-->
                             <div class="badge bg-danger text-white position-absolute" style="top: 0.5em; right: 0.5em;">FLASH SALE </div>
                             <!-- Product image-->
-                            <img src="{{ product.image.url }}" class="card-img-top" alt="..." style="max-width: 300px; max-height: 400px;" />
-
+                            <img class="card-img-top" src="{{ product.image.url}}" alt="..." />
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">

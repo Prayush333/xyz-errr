@@ -7,4 +7,5 @@ urlpatterns = [
    path("about/",views.AboutPage.as_view(),name="about"),
    path("register/",views.UserResister.as_view(), name="register"),
    path("product/<int:id>",views.ProductDetail.as_view(), name="product-detail"),
+   path("category/<str:id>", views.CategoryView.as_view(), name="category"),
 ]
