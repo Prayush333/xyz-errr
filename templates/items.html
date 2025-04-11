@@ -1,1 +1,36 @@
-<h1>hello guys!!!</h1>
+{% extends 'base.html' %}
+{% block content %}
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        
+        {% if product.is_sale %}
+        <div class="text-center text-white">
+            <img class="card-img-top w-50" src="{{ product.image.url}}" alt="{{ product.name }}" />
+            <h1 class="display-4 fw-bolder"> {{product.name}}</h1>
+            <p class="lead fw-normal text-white-50 mb-0"> Price = {{product.sale_price}}</p>
+            <p class="lead fw-normal text-white-50 mb-0">Category = {{product.Category}}</p>
+            <p class="lead fw-normal text-white-50 mb-0"> Description = {{product.description}}</p>
+            <br/><br/>
+             <a href="#" class="btn btn-success">Buy Product</a>
+             <a href="#" class="btn btn-primary">ADD to cart</a>
+        </div>
+
+        {% else %}
+        <div class="text-center text-white">
+            <img class="card-img-top w-50" src="{{ product.image.url}}" alt="{{ product.name }}" />
+            <h1 class="display-4 fw-bolder"> {{product.name}}</h1>
+            <p class="lead fw-normal text-white-50 mb-0"> Price = {{product.price}}</p>
+            <p class="lead fw-normal text-white-50 mb-0">Category = {{product.Category}}</p>
+            <p class="lead fw-normal text-white-50 mb-0"> Description = {{product.description}}</p>
+            <br/><br/>
+             <a href="#" class="btn btn-success">Buy Product</a>
+             <a href="#" class="btn btn-primary">ADD to cart</a>
+        </div>
+
+        {% endif %}
+        
+    </div>
+</header>
+
+{% endblock content %}

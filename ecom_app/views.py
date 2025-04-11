@@ -24,7 +24,7 @@ class UserResister(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
     
-class Product(DetailView):
+class ProductDetail(DetailView):
     model = Product
     template_name = "items.html"
     context_object_name = "product"
