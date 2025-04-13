@@ -8,4 +8,10 @@ urlpatterns = [
    path("register/",views.UserResister.as_view(), name="register"),
    path("product/<int:id>",views.ProductDetail.as_view(), name="product-detail"),
    path("category/<str:id>", views.CategoryView.as_view(), name="category"),
+
+    #cart-section
+   path('cart/',views.MainCart.as_view(),name="cart_main"),
+    path('add/',views.AddCart.as_view(),name="cart_add"),
+    path('delete/',views.DeleteCart.as_view(),name="cart_delete"),
+    path('update/',views.UpdateCart.as_view(),name="cart_update"),
 ]

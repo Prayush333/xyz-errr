@@ -50,3 +50,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.product
+    
+class Cart(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    
