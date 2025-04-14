@@ -5,3 +5,5 @@ from ecom_app.cart import Cart
 
 def cart(request):
     return {'cart': Cart(request)} #to deturn default data from our Cart
+
+

@@ -1,9 +1,13 @@
 from django.shortcuts import render,get_object_or_404
-from django.views.generic import ListView,CreateView,DetailView,DeleteView
+from django.views.generic import ListView,CreateView,DetailView,DeleteView,View
 from ecom_app.models import Customer, Product,Category,Cart
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+
+from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
@@ -49,15 +53,15 @@ class CategoryView(DetailView):
         return context
     
 
-# cart-section
-
+#cart views
 class MainCart(ListView):
     model = Cart
     template_name = "cart/cart_main.html"
     
 
 class AddCart(CreateView):
-   pass
+   
+   def (self, request, )
 
 class DeleteCart(DeleteView):
     pass

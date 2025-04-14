@@ -4,33 +4,55 @@
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         
-        {% if product.is_sale %}
         <div class="text-center text-white">
-            <img class="card-img-top w-50" src="{{ product.image.url}}" alt="{{ product.name }}" />
-            <h1 class="display-4 fw-bolder"> {{product.name}}</h1>
-            <p class="lead fw-normal text-white-50 mb-0"> NRs.{{product.sale_price}}</p>
-            <p class="lead fw-normal text-white-50 mb-0"> {{product.Category}}</p><br/>
-            <p class="lead fw-normal text-white-50 mb-0"> {{product.description}}</p>
+            <img class="card-img-top w-50" src="{{ product.image.url }}" alt="{{ product.name }}" />
+            <h1 class="display-4 fw-bolder">{{ product.name }}</h1>
+            
+            {% if product.is_sale %}
+                <p class="lead fw-normal text-white-50 mb-0">NRs. {{ product.sale_price }}</p>
+            {% else %}
+                <p class="lead fw-normal text-white-50 mb-0">NRs. {{ product.price }}</p>
+            {% endif %}
+            
+            <p class="lead fw-normal text-white-50 mb-0">{{ product.Category }}</p><br/>
+            <p class="lead fw-normal text-white-50 mb-0">{{ product.description }}</p>
             <br/><br/>
-             <a href="#" class="btn btn-success">Buy Product</a>
-             <a href="#" class="btn btn-primary">ADD to cart</a>
+            
+            <a href="#" class="btn btn-success">Buy Product</a>
+            <button 
+                type="button" 
+                class="btn btn-primary add-cart" 
+                data-product-id="{{ product.id }}">
+                ADD to cart
+            </button> 
         </div>
-
-        {% else %}
-        <div class="text-center text-white">
-            <img class="card-img-top w-50" src="{{ product.image.url}}" alt="{{ product.name }}" />
-            <h1 class="display-4 fw-bolder"> {{product.name}}</h1>
-            <p class="lead fw-normal text-white-50 mb-0"> NRs.{{product.price}}</p>
-            <p class="lead fw-normal text-white-50 mb-0">{{product.Category}}</p><br/>
-            <p class="lead fw-normal text-white-50 mb-0">{{product.description}}</p>
-            <br/><br/>
-             <a href="#" class="btn btn-success">Buy Product</a>
-             <a href="#" class="btn btn-primary">ADD to cart</a>
-        </div>
-
-        {% endif %}
         
     </div>
 </header>
+
+<script>
+    $(document).on('click', '.add-cart', function(e) {
+        e.preventDefault();
+
+        const productId = $(this).data('product-id');
+
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'add' %}",
+            data: {
+                product_id: productId,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(response) {
+                console.log("Success:", response);
+                // Optionally: Show toast, update cart count, etc.
+            },
+            error: function(xhr, errmsg, err) {
+                console.error("Error:", xhr.status, xhr.responseText);
+            }
+        });
+    });
+</script>
 
 {% endblock content %}
