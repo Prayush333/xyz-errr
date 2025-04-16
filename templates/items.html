@@ -30,29 +30,4 @@
     </div>
 </header>
 
-<script>
-    $(document).on('click', '.add-cart', function(e) {
-        e.preventDefault();
-
-        const productId = $(this).data('product-id');
-
-        $.ajax({
-            type: 'POST',
-            url: "{% url 'add' %}",
-            data: {
-                product_id: productId,
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                action: 'post'
-            },
-            success: function(response) {
-                console.log("Success:", response);
-                // Optionally: Show toast, update cart count, etc.
-            },
-            error: function(xhr, errmsg, err) {
-                console.error("Error:", xhr.status, xhr.responseText);
-            }
-        });
-    });
-</script>
-
 {% endblock content %}
