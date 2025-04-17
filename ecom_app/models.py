@@ -51,13 +51,13 @@ class Order(models.Model):
     def __str__(self):
         return self.product
     
-class Cart(models.Model):
+class CartItem(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
-        return f'{self.product.name} - Cart'
+        return f'{self.product.name} - CartItem'
 
     def get_total_price(self):
         # Method to calculate the total price of this item in the cart

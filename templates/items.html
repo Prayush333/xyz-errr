@@ -1,63 +1,67 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        
-        <div class="text-center text-white">
-            <img class="card-img-top w-50" src="{{ product.image.url }}" alt="{{ product.name }}" />
-            <h1 class="display-4 fw-bolder">{{ product.name }} id= {{product.id}}</h1>
-            
-            {% if product.is_sale %}
-                <p class="lead fw-normal text-white-50 mb-0">NRs. {{ product.sale_price }}</p>
-            {% else %}
-                <p class="lead fw-normal text-white-50 mb-0">NRs. {{ product.price }}</p>
-            {% endif %}
-            
-            <p class="lead fw-normal text-white-50 mb-0">{{ product.Category }}</p><br/>
-            <p class="lead fw-normal text-white-50 mb-0">{{ product.description }}</p>
-            <br/><br/>
-            
-            <a href="#" class="btn btn-success">Buy Product</a>
-            <button 
-                type="button" 
-                class="btn btn-primary add-cart" 
-                value="{{ product.id }}" 
-                id="add-cart">
-                ADD to cart
-            </button> 
-        </div>
-        
-    </div>
-</header>
-<script>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow flex-md-row align-items-center">
 
+            
+                <div class="col-md-5">
+                    <img src="{{ product.image.url }}" class="img-fluid rounded-start w-100" alt="{{ product.name }}">
+                </div>
+
+                
+                <div class="col-md-7 p-4 text-center text-md-start">
+                    <h4 class="fw-bold">{{ product.name }}</h4>
+
+                    {% if product.is_sale %}
+                        <p class="text-success fw-semibold">NRs. {{ product.sale_price }}</p>
+                    {% else %}
+                        <p class="text-muted fw-semibold">NRs. {{ product.price }}</p>
+                    {% endif %}
+
+                    <p class="text-secondary">{{ product.category }}</p>
+                    <p class="text-muted">{{ product.description }}</p>
+
+                    <div class="d-flex justify-content-center justify-content-md-start gap-3 mt-3">
+                        <a href="#" class="btn btn-success">Buy Product</a>
+                        <button 
+                            type="button" 
+                            class="btn btn-primary add-cart" 
+                            value="{{ product.id }}" 
+                            id="add-cart">
+                            ADD to cart
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br/><br/><br/><br/><br/><br/>
+
+<!-- AJAX Script -->
+<script>
     $(document).on('click', '#add-cart', function(e){
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url: '{% url 'cart_add' %}',
+            url: '{% url "cart_add" %}',
             data: {
                 product_id: $('#add-cart').val(),
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             },
-
             success: function(json){
-                console.log(json)
-
+                document.getElementById('cart_num').textContent = json.quantity;
             },
-
             error: function(xhr, errmsg, err){
-
-                
+                console.error('Error adding to cart:', errmsg);
             }
-
-
         });
-
-
-    })
+    });
 </script>
 
 {% endblock content %}

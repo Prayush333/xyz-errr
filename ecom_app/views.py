@@ -1,11 +1,12 @@
 from django.http import JsonResponse 
 from django.shortcuts import render,get_object_or_404
 from django.views.generic import ListView,CreateView,DetailView
-from ecom_app.models import Customer, Product,Category,Cart
+from ecom_app.models import Customer, Product,Category,CartItem
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import View
+from .cart import Cart
 
 
 
@@ -32,8 +33,6 @@ class ProductDetail(DetailView):
     template_name = "items.html"
     context_object_name = "product"
  
-    def get_object(self):
-        return Product.objects.get(id=self.kwargs["id"])
 
 
 class CategoryView(DetailView):
@@ -53,7 +52,7 @@ class CategoryView(DetailView):
 
 #cart views
 class CartListView(ListView):
-    model= Cart
+    model= CartItem
     template_name = "cart/cart_list.html"
 
 class AddCart(View):
@@ -66,15 +65,18 @@ class AddCart(View):
         cart= Cart(request)
 
         if request.POST.get('action')=='post':
-
+           
             product_id = int(request.POST.get('product_id'))
-
+            # look for a product in a DB
             product = get_object_or_404(Product, id=product_id)
-
+                # save to session
             cart.add(product=product)
-
-            response = JsonResponse({'Product Name':product.name})
-
+             # get the quantity
+            cart_quantity = cart.__len__()
+             # return response
+             # response = JsonResponse({'Product Name':product.name})
+            response = JsonResponse({'quantity':cart_quantity})
+           
             return response
         
         return JsonResponse({'error': 'Invalid action'}, status=400)
