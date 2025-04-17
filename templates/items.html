@@ -6,7 +6,7 @@
         
         <div class="text-center text-white">
             <img class="card-img-top w-50" src="{{ product.image.url }}" alt="{{ product.name }}" />
-            <h1 class="display-4 fw-bolder">{{ product.name }}</h1>
+            <h1 class="display-4 fw-bolder">{{ product.name }} id= {{product.id}}</h1>
             
             {% if product.is_sale %}
                 <p class="lead fw-normal text-white-50 mb-0">NRs. {{ product.sale_price }}</p>
@@ -22,12 +22,42 @@
             <button 
                 type="button" 
                 class="btn btn-primary add-cart" 
-                data-product-id="{{ product.id }}">
+                value="{{ product.id }}" 
+                id="add-cart">
                 ADD to cart
             </button> 
         </div>
         
     </div>
 </header>
+<script>
+
+    $(document).on('click', '#add-cart', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'cart_add' %}',
+            data: {
+                product_id: $('#add-cart').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+
+            success: function(json){
+                console.log(json)
+
+            },
+
+            error: function(xhr, errmsg, err){
+
+                
+            }
+
+
+        });
+
+
+    })
+</script>
 
 {% endblock content %}

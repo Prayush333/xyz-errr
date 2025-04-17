@@ -1,6 +1,6 @@
-from django.http import JsonResponse
+from django.http import JsonResponse 
 from django.shortcuts import render,get_object_or_404
-from django.views.generic import ListView,CreateView,DetailView,DeleteView
+from django.views.generic import ListView,CreateView,DetailView
 from ecom_app.models import Customer, Product,Category,Cart
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -52,85 +52,33 @@ class CategoryView(DetailView):
     
 
 #cart views
-class MainCart(View):
-    def get(self,request,*args,**kwargs):
-        customer = request.user.customer
-        cart_items = Cart.objects.filter(customer=customer)
-        total_price = sum([item.get_total_price() for item in cart_items]) 
-        return render(
-            request, 
-            "cart/cart_main.html",
-              {
-                "cart_items":cart_items,
-               "total_price":total_price
-               })
-   
-    
+class CartListView(ListView):
+    model= Cart
+    template_name = "cart/cart_list.html"
 
 class AddCart(View):
+    def cart_add(request):
+        cart= Cart(request)
 
-    def post(self,request,*args,**kwargs):
-        data = json.loads(request.body)
-        product_id = data.get('product_id')
-        customer = request.user.customer #  user is login then only
+        if request.POST.get('action')=='post':
 
-        # to check if product exists
-        product = Product.objects.get(id = product_id)
+            product_id = int(request.POST.get('product_id'))
 
-        # checking if product is already on cart
-        cart_item, created = Cart.objects.get_or_create(customer=customer, product=product)
+            product = get_object_or_404(Product, id=product_id)
 
-        if not created:
-            cart_item.quantity += 1 # to increase the quantity if it is already in cart
-            cart_item.save()
+            cart.add(product=product)
 
-        cart_count = Cart.objects.filter(customer=customer).count()
+            response = JsonResponse({'Product Name':product.name})
 
-        return JsonResponse({
-            "status":"success",
-            "quantity":cart_item.quantity,
-            "cart_count":cart_count
-            })
+            return response
 
 
+    
 
 class DeleteCart(View):
-
-    def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        cart_id = data.get('cart_id')
-
-        #  to Remove the cart item
-        cart_item = Cart.objects.get(id=cart_id)
-        cart_item.delete()
-
-        cart_count = Cart.objects.filter(customer=request.user.customer).count()
-       
-        return JsonResponse({
-            "status": "success",
-              "cart_count": cart_count
-              })
-
-
-
+    pass
 
 class UpdateCart(View):
+    pass
     
-    def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        cart_id = data.get('cart_id')
-        new_quantity = data.get('quantity')
-
-        #  to Update cart item quantity
-        cart_item = Cart.objects.get(id=cart_id)
-        cart_item.quantity = new_quantity
-        cart_item.save()
-
-        cart_count = Cart.objects.filter(customer=request.user.customer).count()
-       
-        return JsonResponse({
-            "status": "success",
-              "quantity": cart_item.quantity,
-                "cart_count": cart_count
-                })
-
+ 

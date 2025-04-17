@@ -12,7 +12,7 @@ urlpatterns = [
    path("category/<str:id>", views.CategoryView.as_view(), name="category"),
 
     #cart views
-   path('cart/',views.MainCart.as_view(),name="cart_main"),
+   path('cart/',views.CartListView.as_view(),name="cart_list"),
     path('add/',views.AddCart.as_view(),name="cart_add"),
     path('delete/',views.DeleteCart.as_view(),name="cart_delete"),
     path('update/',views.UpdateCart.as_view(),name="cart_update"),
