@@ -57,7 +57,12 @@ class CartListView(ListView):
     template_name = "cart/cart_list.html"
 
 class AddCart(View):
-    def cart_add(request):
+
+    def post(self, request):
+        return self.cart_add(request)
+    
+
+    def cart_add(self, request):
         cart= Cart(request)
 
         if request.POST.get('action')=='post':
@@ -71,6 +76,8 @@ class AddCart(View):
             response = JsonResponse({'Product Name':product.name})
 
             return response
+        
+        return JsonResponse({'error': 'Invalid action'}, status=400)
 
 
     
