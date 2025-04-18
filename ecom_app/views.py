@@ -51,9 +51,13 @@ class CategoryView(DetailView):
     
 
 #cart views
-class CartListView(ListView):
-    model= CartItem
-    template_name = "cart/cart_list.html"
+class CartListView(View):
+    def get(self, request):
+        cart = Cart(request)
+        cart_products = cart.get_prods
+        return render(request, "cart/cart_list.html", {"cart_products": cart_products})
+
+   
 
 class AddCart(View):
 
