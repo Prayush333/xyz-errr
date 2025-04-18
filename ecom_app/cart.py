@@ -31,4 +31,3 @@ class Cart():
         products = Product.objects.filter(id__in=product_ids)
 
         return products
-    
