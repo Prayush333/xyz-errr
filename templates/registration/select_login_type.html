@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Select Login Type{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h2 class="card-title mb-4">Select Login Type</h2>
+                    <p>Please choose how you would like to log in:</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'customer_login' %}" class="btn btn-primary btn-lg">Login as Customer</a>
+                        <a href="{% url 'employee_login' %}" class="btn btn-secondary btn-lg">Login as Employee</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

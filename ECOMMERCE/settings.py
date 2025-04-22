@@ -53,7 +53,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'ecom_app.context_processor.cart',
+                'ecom_app.context_processor.cart', # Existing cart processor
+                'ecom_app.context_processor.latest_order_status', # Added latest order status processor
             ],
         },
     },
@@ -116,5 +117,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "login"
+LOGIN_REDIRECT_URL = "/" # Where to go after successful login
+LOGOUT_REDIRECT_URL = "select_login_type" # Where to go after logout
+LOGIN_URL = 'select_login_type' # The URL name to redirect to for login
+
+# PayPal Settings (Consider removing if not used)
+PAYPAL_MODE = "sandbox"  # Change to "live" for production
+PAYPAL_CLIENT_ID = "YOUR_PAYPAL_CLIENT_ID"  # Replace with your Client ID
+PAYPAL_CLIENT_SECRET = "YOUR_PAYPAL_CLIENT_SECRET"  # Replace with your Secret

@@ -12,6 +12,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8">
+        {% if cart_products %}
             {% for product in cart_products %}
                 <div class="card shadow mb-4">
                     <div class="row g-0">
@@ -34,12 +35,16 @@
                             <p class="text-muted">{{ product.description }}</p>
 
                             <div class="d-flex justify-content-center justify-content-md-start gap-3 mt-3">
-                                <a href="#" class="btn btn-success">  Buy Product</a>
+                                <a href="{% url 'buy_product' product.id %}" class="btn btn-success">Buy Product</a>
+                                <a href="{% url 'cart_delete' product.id %}" class="btn btn-danger">Delete</a>
                             </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+        {% else %}  
+        <p>Currently the cart is empty!!</p> 
+        {% endif %} 
         </div>
     </div>
 </div>

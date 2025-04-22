@@ -9,15 +9,37 @@
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
+                    {% if not user.is_staff %}
+                        {# Show Latest Order Status / My Orders link for customers #}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_order_list' %}">
+                                {% if latest_order %}
+                                    Order Status:
+                                    <span class="badge
+                                        {% if latest_order.status == 'Delivered' %}bg-success
+                                        {% elif latest_order.status == 'Shipped' %}bg-info
+                                        {% elif latest_order.status == 'Processing' %}bg-warning
+                                        {% elif latest_order.status == 'Cancelled' %}bg-danger
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ latest_order.get_status_display }}
+                                    </span>
+                                {% else %}
+                                    My Orders
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+                    {# Logout button for all authenticated users #}
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
                         <button type="submit" class="nav-link btn btn-link" style="border: none; background: none;">Logout</button>
                     </form>
                 </li>
 
                  {% else %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                 {# Link to the login type selection page #}
+                <li class="nav-item"><a class="nav-link" href="{% url 'select_login_type' %}">Login</a></li>
 
                 {% endif %}
                 <li class="nav-item dropdown">

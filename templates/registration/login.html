@@ -5,9 +5,9 @@
     <div class="col-md-6 col-lg-4">
       <div class="card shadow-sm">
         <div class="card-body">
-          <h2 class="card-title text-center mb-4">Login</h2>
+          <h2 class="card-title text-center mb-4">Customer Login</h2>
 
-          <form method="post" novalidate>
+          <form method="post" action="{% url 'customer_login' %}" novalidate> {# Point action to customer_login #}
             {% csrf_token %}
             <div class="mb-3">
               <label for="username" class="form-label">Username</label>
@@ -27,13 +27,17 @@
                      id="password"
                      placeholder="Enter password"
                      required />
+           </div>
 
-            </div>
+           {# Removed login_type radio buttons #}
 
-            <div class="d-grid">
-              <button type="submit" class="btn btn-success">Login</button><br/>
-              
-              <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+           <div class="d-grid">
+             <button type="submit" class="btn btn-primary">Login as Customer</button>
+           </div>
+           <div class="text-center mt-3">
+               <a href="{% url 'register' %}">Need an account? Register</a><br>
+               <a href="{% url 'select_login_type' %}">Not a customer? Select login type</a>
+           </div>
             </div>
           </form>
         </div>

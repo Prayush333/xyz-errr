@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings # Import settings
 import datetime
 
 # categories of products
@@ -40,17 +41,41 @@ class Product(models.Model):
  # product order details 
  #  for delevery
 class Order(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Processing', 'Processing'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
+    ]
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    shipping_address = models.ForeignKey('ShippingAddress', on_delete=models.SET_NULL, null=True, blank=True) # Link to ShippingAddress, allow null if address deleted
     quantity = models.IntegerField(default=1)
-    address = models.CharField(max_length=200,  blank=False)
-    phone = models.CharField(max_length=15, blank=False)
-    date = models.DateField(default=datetime.datetime.today)
-    status = models.BooleanField(default=False)
+    date = models.DateField(default=datetime.date.today) # Use datetime.date.today for DateField
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='Pending' # Default status when an order is created
+    )
+    processed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL, # Keep order record even if employee account is deleted
+        null=True,
+        blank=True,
+        limit_choices_to={'is_staff': True}, # Only allow staff users to be assigned
+        related_name='processed_orders',
+        help_text='Employee who processed the order status (e.g., shipped).'
+    )
+    # OTP fields
+    otp_code = models.CharField(max_length=6, null=True, blank=True, help_text="OTP sent to customer for verification")
+    otp_expiry = models.DateTimeField(null=True, blank=True, help_text="Time when the OTP expires")
+
 
     def __str__(self):
-        return self.product
-    
+        return f"Order {self.id} ({self.status}) for {self.customer}" # Include status in __str__
+
 class CartItem(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
@@ -63,3 +88,38 @@ class CartItem(models.Model):
         # Method to calculate the total price of this item in the cart
         return self.quantity * self.product.price if not self.product.is_sale else self.quantity * self.product.sale_price
     
+# Shipping Address Model
+# Allows users to save multiple shipping addresses
+class ShippingAddress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True) # Use settings.AUTH_USER_MODEL
+    # If you want guests to checkout, user can be null. Otherwise, remove null=True, blank=True.
+    full_name = models.CharField(max_length=255)
+    address_line_1 = models.CharField(max_length=255)
+    address_line_2 = models.CharField(max_length=255, null=True, blank=True) # Optional second address line
+    city = models.CharField(max_length=100)
+    state_province_region = models.CharField(max_length=100) # State, Province, or Region
+    postal_zip_code = models.CharField(max_length=20)
+    country = models.CharField(max_length=100) # Consider using django-countries for a dropdown
+    phone = models.CharField(max_length=20, blank=True) # Optional phone specific to address
+
+    # You might want a field to mark a default address
+    # default = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = "Shipping Addresses" # Correct plural name in Admin
+
+    def __str__(self):
+        return f"Shipping Address for {self.user.username if self.user else 'Guest'} - {self.address_line_1}"
+# Employee Profile Model
+# Stores additional information for staff users, like Employee ID
+class EmployeeProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='employee_profile')
+    employee_id = models.CharField(max_length=50, unique=True, help_text="Unique ID assigned to the employee")
+    is_verified = models.BooleanField(default=False, help_text="Designates whether the employee is verified to perform certain actions.")
+    # Add other employee-specific fields here if needed (e.g., department, job title)
+
+    def __str__(self):
+        return f"Employee Profile for {self.user.username} (ID: {self.employee_id}, Verified: {self.is_verified})"
+
+    # Ensure this profile is only created for staff users.
+    # You might enforce this via signals or admin forms.

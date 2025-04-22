@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %} {# Load i18n for potential future translations #}
+
+{% block title %}Confirm Purchase - {{ product.name }}{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Confirm Your Purchase</h2>
+    <hr>
+
+    {% if product %}
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Product Details:</h4>
+            <p><strong>Name:</strong> {{ product.name }}</p>
+            <p><strong>Price:</strong> ${{ product.price }}</p> {# Consider using locale-aware formatting #}
+            <p><strong>Description:</strong> {{ product.description|linebreaksbr }}</p> {# Use linebreaksbr for better formatting #}
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid mb-3" style="max-height: 200px; border-radius: 5px;">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h4>Select Payment Method:</h4>
+
+            {% comment %} Form for non-PayPal methods (COD, Esewa) {% endcomment %}
+            <form method="post" action="{% url 'buy_product' product.id %}" id="non-paypal-form">
+                {% csrf_token %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD" checked>
+                    <label class="form-check-label" for="cod">
+                        Cash on Delivery (COD)
+                    </label>
+                </div>
+
+                <hr class="my-3">
+                <h5>Shipping Address:</h5>
+
+                <div class="mb-3">
+                    <label for="full_name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="full_name" name="full_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address_line_1" class="form-label">Address Line 1</label>
+                    <input type="text" class="form-control" id="address_line_1" name="address_line_1" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address_line_2" class="form-label">Address Line 2 (Optional)</label>
+                    <input type="text" class="form-control" id="address_line_2" name="address_line_2">
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city" name="city" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="state_province_region" class="form-label">State/Province/Region</label>
+                        <input type="text" class="form-control" id="state_province_region" name="state_province_region" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="postal_zip_code" class="form-label">Postal/ZIP Code</label>
+                        <input type="text" class="form-control" id="postal_zip_code" name="postal_zip_code" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="country" name="country" required>
+                    </div>
+                </div>
+                 <div class="mb-3">
+                    <label for="phone" class="form-label">Phone (Optional)</label>
+                    <input type="text" class="form-control" id="phone" name="phone">
+                </div>
+
+                <button type="submit" class="btn btn-success mt-3">Confirm Order (COD)</button>
+            </form>
+
+            <a href="{% url 'product-detail' product.pk %}" class="btn btn-secondary mt-3">Cancel Purchase</a> {# Removed PayPal section #}
+        </div>
+    </div>
+    {% else %}
+    <p class="alert alert-warning">Product not found.</p>
+    {% endif %}
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+{# No specific scripts needed for COD only #}
+{% endblock scripts %}

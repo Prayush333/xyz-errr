@@ -25,7 +25,7 @@
                     <p class="text-muted">{{ product.description }}</p>
 
                     <div class="d-flex justify-content-center justify-content-md-start gap-3 mt-3">
-                        <a href="#" class="btn btn-success">Buy Product</a>
+                        <a href="{% url 'buy_product' product.id %}" class="btn btn-success">Buy Product</a>
                         <button 
                             type="button" 
                             class="btn btn-primary add-cart" 
@@ -55,7 +55,28 @@
                 action: 'post'
             },
             success: function(json){
+                // Update the cart quantity display in the navbar
                 document.getElementById('cart_num').textContent = json.quantity;
+
+                // --- Show Bootstrap Toast ---
+                // Get the toast element
+                var toastEl = document.getElementById('cartToast');
+                if (toastEl) {
+                    // Get the toast body element
+                    var toastBody = toastEl.querySelector('.toast-body');
+                    if (toastBody) {
+                        // Update the toast message
+                        toastBody.textContent = json.product_name + " added to cart. Total items: " + json.quantity;
+                    }
+                    // Create a new Bootstrap Toast instance with autohide options and show it
+                    var toast = new bootstrap.Toast(toastEl, { autohide: true, delay: 5000 }); // Autohide after 5 seconds
+                    toast.show();
+                } else {
+                    console.error("Toast element #cartToast not found in base template.");
+                    // Fallback alert if toast element is missing
+                    alert(json.product_name + " added to cart. Total items: " + json.quantity);
+                }
+                // --- End Bootstrap Toast ---
             },
             error: function(xhr, errmsg, err){
                 console.error('Error adding to cart:', errmsg);

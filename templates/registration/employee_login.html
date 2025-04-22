@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Employee Login{% endblock title %}
+
+{% block content %}
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Employee Login</h2>
+
+          {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+              Please correct the errors below.
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text"
+                     class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                     name="username"
+                     id="username"
+                     placeholder="Enter username"
+                     value="{{ form.username.value|default:'' }}"
+                     required />
+              {% if form.username.errors %}
+                <div class="invalid-feedback">
+                  {{ form.username.errors|striptags }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password"
+                     class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                     name="password"
+                     id="password"
+                     placeholder="Enter password"
+                     required />
+               {% if form.password.errors %}
+                <div class="invalid-feedback">
+                  {{ form.password.errors|striptags }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="employee_id" class="form-label">Employee ID</label>
+              <input type="text"
+                     class="form-control {% if form.employee_id.errors %}is-invalid{% endif %}"
+                     name="employee_id"
+                     id="employee_id"
+                     placeholder="Enter your Employee ID"
+                     value="{{ form.employee_id.value|default:'' }}"
+                     required />
+               {% if form.employee_id.errors %}
+                <div class="invalid-feedback">
+                  {{ form.employee_id.errors|striptags }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-secondary">Login as Employee</button>
+            </div>
+             <div class="text-center mt-3">
+                 <a href="{% url 'select_login_type' %}">Not an employee?</a>
+             </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
